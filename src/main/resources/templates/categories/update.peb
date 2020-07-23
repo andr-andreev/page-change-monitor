@@ -1,0 +1,21 @@
+{% extends "fragments/layout" %}
+
+{% set menu = 'categories' %}
+{% set title = "Update Category: " + category.name %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+    {% include "fragments/breadcrumbItem" with {"path": href('/'), "text": "Home"} %}
+    {% include "fragments/breadcrumbItem" with {"path": href('/categories'), "text": "Categories"} %}
+    {% include "fragments/breadcrumbItem" with {"path": null, "text": category.name} %}
+    {% include "fragments/breadcrumbItem" with {"path": null, "text": "Update"} %}
+{% endblock %}
+
+{% block body %}
+<div class="category-create">
+    <h1>{{ title }}</h1>
+
+    {% include "categories/_form" %}
+</div>
+{% endblock %}

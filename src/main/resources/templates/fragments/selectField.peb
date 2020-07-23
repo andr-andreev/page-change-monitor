@@ -1,0 +1,26 @@
+{% macro selectField(formName, label, inputName, items, inputValue, _context) %}
+
+{% set valid = not hasFieldErrors(formName, inputName) %}
+
+<div class="form-group field-{{ inputName }}">
+    <label class="control-label" for="{{ inputName }}">{{ label }}</label>
+
+    <select id="{{ inputName }}" class="form-control {{ valid ? '' : 'is-invalid' }}" name="{{ inputName }}">
+        <option value=""></option>
+        {% for item in items %}
+            <option value="{{ item.key }}" {{ item.key == inputValue? 'selected' : '' }}>
+               {{ item.value }}
+            </option>
+        {% endfor %}
+    </select>
+
+    {% if valid %}
+    {% else %}
+        <div class="invalid-feedback">
+            {% for err in getFieldErrors(formName, inputName) %}
+                {{ err }}<br>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endmacro %}

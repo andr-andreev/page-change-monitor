@@ -1,0 +1,23 @@
+{# @pebvariable name="page" type="net.andreyandreev.pagechangemonitor.page.Page" #}
+
+{% extends "fragments/layout" %}
+
+{% set menu = 'pages' %}
+{% set title = "Edit page: " + page.name %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+    {% include "fragments/breadcrumbItem" with {"path": href('/'), "text": "Home"} %}
+    {% include "fragments/breadcrumbItem" with {"path": href('/pages'), "text": "Pages"} %}
+    {% include "fragments/breadcrumbItem" with {"path": href('/pages/' + page.id), "text": page.name} %}
+    {% include "fragments/breadcrumbItem" with {"path": null, "text": "Update"} %}
+{% endblock %}
+
+{% block body %}
+<div class="page-create">
+    <h1>{{ page.title }}</h1>
+
+    {% include "pages/_form" %}
+</div>
+{% endblock %}

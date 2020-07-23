@@ -1,0 +1,22 @@
+{% import "fragments/inputField" %}
+{% import "fragments/selectField" %}
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-6">
+           {{ inputField("category", "Category Name", "name", "text", category.name, _context) }}
+       </div>
+    </div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+          {% if page['new'] %}
+                <button type="submit" class="btn btn-success">Create</button>
+          {% else %}
+                <button type="submit" class="btn btn-primary">Update</button>
+          {% endif %}
+        </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,56 @@
+{# @pebvariable name="page" type="net.andreyandreev.pagechangemonitor.page.Page" #}
+
+{% import "fragments/inputField" %}
+{% import "fragments/selectField" %}
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            {{ selectField("page", "Category", "category", categories, page.category.id, _context) }}
+      </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+           {{ inputField("page", "Title", "name", "text", page.name, _context) }}
+       </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+           {{ inputField("page", "URL", "url", "text", page.url, _context) }}
+            </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+
+                  {{ inputField("page", "Filter From", "filterFrom", "text", page.filterFrom, _context) }}
+
+                    </div>
+
+        <div class="col-md-6">
+                  {{ inputField("page", "Filter To", "filterTo", "text", page.filterTo, _context) }}
+        </div>
+    </div>
+
+    <div class="row">
+<div class="col-md-6">
+                  {{ inputField("page", "Active", "isActive", "checkbox", page.isActive, _context) }}
+</div>
+</div>
+
+
+<div class="row">
+<div class="col-md-6">
+    <div class="form-group">
+      {% if page['new'] %}
+            <button type="submit" class="btn btn-success">Follow</button>
+      {% else %}
+            <button type="submit" class="btn btn-primary">Update</button>
+      {% endif %}
+    </div>
+    </div>
+    </div>
+</form>
+

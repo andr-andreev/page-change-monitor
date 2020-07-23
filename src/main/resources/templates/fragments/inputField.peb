@@ -1,0 +1,33 @@
+{% macro inputField(formName, label, inputName, type, inputValue, _context) %}
+
+{% set valid = not hasFieldErrors(formName, inputName) %}
+
+<div class="form-group field-{{ inputName }}">
+{% if type == "checkbox" %}
+    <label>
+        <input type="checkbox" id="{{ inputName }}" name="{{ inputName }}" value="true" {{ inputValue ? 'checked' : '' }}>
+        {{ label }}
+    </label>
+    <input type="hidden" name="_{{ inputName }}" value="on">
+{% else %}
+    <label class="control-label" for="{{ inputName }}">
+        {{ label }}
+    </label>
+
+    <input type="{{ type }}"
+    id="{{ inputName }}"
+    class="form-control {{ valid ? '' : 'is-invalid' }}"
+    name="{{ inputName }}"
+    value="{{ inputValue }}" maxlength="255">
+{% endif %}
+
+{% if valid %}
+{% else %}
+    <div class="invalid-feedback">
+        {% for err in getFieldErrors(formName, inputName) %}
+            {{ err }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+</div>
+{% endmacro %}

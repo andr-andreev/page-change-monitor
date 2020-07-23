@@ -1,0 +1,12 @@
+{# @pebvariable name="path" type="String" #}
+{# @pebvariable name="text" type="String" #}
+
+<li class="breadcrumb-item {{ path == null ? 'active' : '' }}">
+{% if path %}
+    <a href="{{ path }}">
+        {{ text }}
+    </a>
+{% else %}
+    {{- text -}}
+{% endif %}
+</li>

@@ -1,0 +1,60 @@
+{% extends "fragments/layout" %}
+
+{% set menu = 'categories' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block breadcrumbs %}
+    {% include "fragments/breadcrumbItem" with {"path": href('/'), "text": "Home"} %}
+    {% include "fragments/breadcrumbItem" with {"path": null, "text": "Categories"} %}
+{% endblock %}
+
+{% block body %}
+<div class="category-index">
+
+    <h1>Categories</h1>
+
+    <p>
+            <a class="btn btn-success" href="{{ href('/categories/new') }}">Create Category</a>
+    </p>
+
+    <div class="grid-view">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th width="40">#</th>
+                <th>Name</th>
+                <th  width="220"></th>
+            </tr>
+
+            </thead>
+            <tbody>
+
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.id }}</td>
+
+                    <td>
+                        {{ category.name }}
+                    </td>
+
+                    <td class="text-center">
+                        <form action="{{ href("/categories/#{category.id}") }}" method="POST">
+                            <a class="btn btn-success btn-sm" href="{{ href("/categories/#{category.id}/edit") }}" title="Update" aria-label="Update">
+                                Update
+                            </a>
+
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger btn-sm" type="submit">
+                                Delete
+                            </button>
+                         </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
