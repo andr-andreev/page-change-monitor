@@ -6,13 +6,15 @@ import org.apache.commons.chain.impl.ContextBase;
 import java.util.List;
 
 public class PageProcessContext extends ContextBase {
-  Page page;
 
-  String originalContent;
+	Page page;
 
-  String content;
+	String originalContent;
 
-  List<String> lines;
+	String content;
 
-  Boolean fetchPageContent;
+	List<String> lines;
+
+	Boolean fetchPageContent;
+
 }

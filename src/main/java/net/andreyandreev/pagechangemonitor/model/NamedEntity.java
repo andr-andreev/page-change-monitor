@@ -7,20 +7,21 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 public class NamedEntity extends BaseEntity {
 
-  @Column(name = "name")
-  @Size(min = 3, max = 255)
-  private String name;
+	@Column(name = "name")
+	@Size(min = 3, max = 255)
+	private String name;
 
-  public String getName() {
-    return this.name;
-  }
+	public String getName() {
+		return this.name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  @Override
-  public String toString() {
-    return this.getName();
-  }
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
 }

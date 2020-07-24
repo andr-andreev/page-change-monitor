@@ -25,51 +25,48 @@ import java.util.stream.Collectors;
 @Component
 public class RssFeedView extends AbstractRssFeedView {
 
-  @Value("${spring.application.name}")
-  private String appName;
+	@Value("${spring.application.name}")
+	private String appName;
 
-  @Value("${app.rss-item-count}")
-  private Integer rssItemCount;
+	@Value("${app.rss-item-count}")
+	private Integer rssItemCount;
 
-  @Autowired private ChangeRepository changes;
+	@Autowired
+	private ChangeRepository changes;
 
-  @Override
-  protected void buildFeedMetadata(
-      Map<String, Object> model, Channel feed, HttpServletRequest request) {
-    feed.setTitle(appName);
-    feed.setDescription(appName);
-    feed.setLink(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
-    feed.setPubDate(new Date());
-    feed.setUri("https://example.com/");
-  }
+	@Override
+	protected void buildFeedMetadata(Map<String, Object> model, Channel feed, HttpServletRequest request) {
+		feed.setTitle(appName);
+		feed.setDescription(appName);
+		feed.setLink(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
+		feed.setPubDate(new Date());
+		feed.setUri("https://example.com/");
+	}
 
-  @Override
-  protected List<Item> buildFeedItems(
-      Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) {
-    Pageable pageable = PageRequest.of(0, rssItemCount, Sort.by("id").descending());
+	@Override
+	protected List<Item> buildFeedItems(Map<String, Object> model, HttpServletRequest request,
+			HttpServletResponse response) {
+		Pageable pageable = PageRequest.of(0, rssItemCount, Sort.by("id").descending());
 
-    return changes.findAll(pageable).stream()
-        .map(
-            change -> {
-              Item item = new Item();
+		return changes.findAll(pageable).stream().map(change -> {
+			Item item = new Item();
 
-              Guid guid = new Guid();
-              guid.setValue("change/" + change.getId());
-              guid.setPermaLink(true);
+			Guid guid = new Guid();
+			guid.setValue("change/" + change.getId());
+			guid.setPermaLink(true);
 
-              Content content = new Content();
-              content.setType(Content.TEXT);
-              content.setValue(change.getTextContent());
+			Content content = new Content();
+			content.setType(Content.TEXT);
+			content.setValue(change.getTextContent());
 
-              item.setGuid(guid);
-              item.setTitle(change.getExtendedTitle());
-              item.setLink(change.getPage().getUrl());
-              item.setPubDate(
-                  Date.from(change.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant()));
-              item.setContent(content);
+			item.setGuid(guid);
+			item.setTitle(change.getExtendedTitle());
+			item.setLink(change.getPage().getUrl());
+			item.setPubDate(Date.from(change.getCreatedAt().atZone(ZoneId.systemDefault()).toInstant()));
+			item.setContent(content);
 
-              return item;
-            })
-        .collect(Collectors.toList());
-  }
+			return item;
+		}).collect(Collectors.toList());
+	}
+
 }

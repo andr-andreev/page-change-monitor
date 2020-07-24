@@ -7,14 +7,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ConvertTextToLines implements Command {
-  @Override
-  public boolean execute(Context context) throws Exception {
-    String text = (String) context.get("content");
 
-    List<String> lines = text.lines().collect(Collectors.toList());
+	@Override
+	public boolean execute(Context context) throws Exception {
+		String text = (String) context.get("content");
 
-    context.put("lines", lines);
+		List<String> lines = text.lines().collect(Collectors.toList());
 
-    return false;
-  }
+		context.put("lines", lines);
+
+		return false;
+	}
+
 }

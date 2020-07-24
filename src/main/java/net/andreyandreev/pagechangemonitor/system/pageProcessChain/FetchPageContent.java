@@ -8,29 +8,25 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.net.URL;
 
 public class FetchPageContent implements Command {
-  @Override
-  public boolean execute(Context context) throws Exception {
-    Page page = (Page) context.get("page");
-    Boolean fetchPageContent = (Boolean) context.get("fetchPageContent");
 
-    if (!fetchPageContent) {
-      return false;
-    }
+	@Override
+	public boolean execute(Context context) throws Exception {
+		Page page = (Page) context.get("page");
+		Boolean fetchPageContent = (Boolean) context.get("fetchPageContent");
 
-    URL parsedUrl = new URL(page.getUrl());
+		if (!fetchPageContent) {
+			return false;
+		}
 
-    String content =
-        WebClient.create(parsedUrl.getHost())
-            .get()
-            .uri(parsedUrl.toURI())
-            .header("User-Agent", "Mozilla/5.0")
-            .retrieve()
-            .bodyToMono(String.class)
-            .block();
+		URL parsedUrl = new URL(page.getUrl());
 
-    context.put("originalContent", content);
-    context.put("content", content);
+		String content = WebClient.create(parsedUrl.getHost()).get().uri(parsedUrl.toURI())
+				.header("User-Agent", "Mozilla/5.0").retrieve().bodyToMono(String.class).block();
 
-    return false;
-  }
+		context.put("originalContent", content);
+		context.put("content", content);
+
+		return false;
+	}
+
 }

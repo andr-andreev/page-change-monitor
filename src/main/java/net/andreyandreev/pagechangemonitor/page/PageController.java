@@ -17,96 +17,90 @@ import java.util.stream.Collectors;
 @Controller
 class PageController {
 
-  private final PageRepository pages;
+	private final PageRepository pages;
 
-  private final CategoryRepository categories;
+	private final CategoryRepository categories;
 
-  public PageController(PageRepository pageRepository, CategoryRepository categoryRepository) {
-    this.pages = pageRepository;
-    this.categories = categoryRepository;
-  }
+	public PageController(PageRepository pageRepository, CategoryRepository categoryRepository) {
+		this.pages = pageRepository;
+		this.categories = categoryRepository;
+	}
 
-  @ModelAttribute("categories")
-  public Map<Integer, String> populateCategories() {
-    return this.categories.findCategories().stream()
-        .collect(Collectors.toMap(Category::getId, Category::getName));
-  }
+	@ModelAttribute("categories")
+	public Map<Integer, String> populateCategories() {
+		return this.categories.findCategories().stream().collect(Collectors.toMap(Category::getId, Category::getName));
+	}
 
-  @GetMapping("/pages")
-  public String showPageList(Map<String, Object> model) {
-    model.put("pages", this.pages.findAll());
+	@GetMapping("/pages")
+	public String showPageList(Map<String, Object> model) {
+		model.put("pages", this.pages.findAll());
 
-    return "pages/index";
-  }
+		return "pages/index";
+	}
 
-  @GetMapping("/pages/new")
-  public String initCreationForm(Map<String, Object> model) {
-    Page page = new Page();
-    page.setIsActive(true);
+	@GetMapping("/pages/new")
+	public String initCreationForm(Map<String, Object> model) {
+		Page page = new Page();
+		page.setIsActive(true);
 
-    model.put("page", page);
+		model.put("page", page);
 
-    return "pages/create";
-  }
+		return "pages/create";
+	}
 
-  @PostMapping("/pages/new")
-  public String processCreationForm(@Valid Page page, BindingResult result) {
-    if (result.hasErrors()) {
-      return "pages/create";
-    }
+	@PostMapping("/pages/new")
+	public String processCreationForm(@Valid Page page, BindingResult result) {
+		if (result.hasErrors()) {
+			return "pages/create";
+		}
 
-    page.setLastContent("");
-    this.pages.save(page);
+		page.setLastContent("");
+		this.pages.save(page);
 
-    return "redirect:/pages/" + page.getId();
-  }
+		return "redirect:/pages/" + page.getId();
+	}
 
-  @GetMapping("/pages/{pageId}/edit")
-  public String initUpdatePageForm(@PathVariable("pageId") int pageId, Model model) {
-    Page page =
-        this.pages
-            .findById(pageId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	@GetMapping("/pages/{pageId}/edit")
+	public String initUpdatePageForm(@PathVariable("pageId") int pageId, Model model) {
+		Page page = this.pages.findById(pageId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-    model.addAttribute("page", page);
+		model.addAttribute("page", page);
 
-    return "pages/update";
-  }
+		return "pages/update";
+	}
 
-  @PostMapping("/pages/{pageId}/edit")
-  public String processUpdatePageForm(
-      @Valid Page page, BindingResult result, @PathVariable("pageId") int pageId, Model model) {
-    if (result.hasErrors()) {
-      model.addAttribute("page", page);
+	@PostMapping("/pages/{pageId}/edit")
+	public String processUpdatePageForm(@Valid Page page, BindingResult result, @PathVariable("pageId") int pageId,
+			Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("page", page);
 
-      return "pages/update";
-    }
+			return "pages/update";
+		}
 
-    page.setId(pageId);
-    page.setLastContent("");
-    this.pages.save(page);
+		page.setId(pageId);
+		page.setLastContent("");
+		this.pages.save(page);
 
-    return "redirect:/pages/{pageId}";
-  }
+		return "redirect:/pages/{pageId}";
+	}
 
-  @GetMapping("/pages/{pageId}")
-  public ModelAndView showPage(@PathVariable("pageId") int pageId) {
-    ModelAndView mav = new ModelAndView("pages/view");
+	@GetMapping("/pages/{pageId}")
+	public ModelAndView showPage(@PathVariable("pageId") int pageId) {
+		ModelAndView mav = new ModelAndView("pages/view");
 
-    Page page =
-        this.pages
-            .findById(pageId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		Page page = this.pages.findById(pageId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-    mav.addObject(page);
+		mav.addObject(page);
 
-    return mav;
-  }
+		return mav;
+	}
 
-  @DeleteMapping("/pages/{pageId}")
-  public String processDeleteCategory(@PathVariable("pageId") int pageId) {
-    this.pages.deleteById(pageId);
+	@DeleteMapping("/pages/{pageId}")
+	public String processDeleteCategory(@PathVariable("pageId") int pageId) {
+		this.pages.deleteById(pageId);
 
-    return "redirect:/pages";
-  }
+		return "redirect:/pages";
+	}
+
 }

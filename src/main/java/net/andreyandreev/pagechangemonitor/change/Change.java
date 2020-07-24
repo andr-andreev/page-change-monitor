@@ -14,82 +14,83 @@ import java.util.ArrayList;
 @Table(name = "changes")
 public class Change extends BaseEntity {
 
-  @ManyToOne
-  @JoinColumn(name = "page_id")
-  @NotNull
-  private Page page;
+	@ManyToOne
+	@JoinColumn(name = "page_id")
+	@NotNull
+	private Page page;
 
-  @Column(name = "diff")
-  private String diff;
+	@Column(name = "diff")
+	private String diff;
 
-  @Column(name = "error_response")
-  private String errorResponse;
+	@Column(name = "error_response")
+	private String errorResponse;
 
-  @Column(name = "created_at")
-  @CreationTimestamp
-  private LocalDateTime createdAt;
+	@Column(name = "created_at")
+	@CreationTimestamp
+	private LocalDateTime createdAt;
 
-  @Column(name = "updated_at")
-  @UpdateTimestamp
-  private LocalDateTime updatedAt;
+	@Column(name = "updated_at")
+	@UpdateTimestamp
+	private LocalDateTime updatedAt;
 
-  public Page getPage() {
-    return page;
-  }
+	public Page getPage() {
+		return page;
+	}
 
-  public void setPage(Page page) {
-    this.page = page;
-  }
+	public void setPage(Page page) {
+		this.page = page;
+	}
 
-  public String getDiff() {
-    return diff;
-  }
+	public String getDiff() {
+		return diff;
+	}
 
-  public void setDiff(String diff) {
-    this.diff = diff;
-  }
+	public void setDiff(String diff) {
+		this.diff = diff;
+	}
 
-  public String getErrorResponse() {
-    return errorResponse;
-  }
+	public String getErrorResponse() {
+		return errorResponse;
+	}
 
-  public void setErrorResponse(String errorResponse) {
-    this.errorResponse = errorResponse;
-  }
+	public void setErrorResponse(String errorResponse) {
+		this.errorResponse = errorResponse;
+	}
 
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
 
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
 
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
 
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-  }
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 
-  public String getExtendedTitle() {
-    ArrayList<String> parts = new ArrayList<>();
+	public String getExtendedTitle() {
+		ArrayList<String> parts = new ArrayList<>();
 
-    if (this.page.getCategory() != null) {
-      parts.add(this.page.getCategory().getName());
-    }
+		if (this.page.getCategory() != null) {
+			parts.add(this.page.getCategory().getName());
+		}
 
-    parts.add(this.page.getName() != null ? this.page.getName() : this.page.getUrl());
+		parts.add(this.page.getName() != null ? this.page.getName() : this.page.getUrl());
 
-    return String.join(" / ", parts);
-  }
+		return String.join(" / ", parts);
+	}
 
-  public String getTextContent() {
-    if (getErrorResponse() != null) {
-      return getErrorResponse();
-    }
+	public String getTextContent() {
+		if (getErrorResponse() != null) {
+			return getErrorResponse();
+		}
 
-    return getDiff();
-  }
+		return getDiff();
+	}
+
 }

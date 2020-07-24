@@ -15,38 +15,38 @@ import java.util.List;
 @Component
 public class PageChangeService {
 
-  public DiffResultDto getDiff(Page page) throws Exception {
-    Command pageProcessChain = new PageProcessChain();
+	public DiffResultDto getDiff(Page page) throws Exception {
+		Command pageProcessChain = new PageProcessChain();
 
-    Context contextOriginal = new PageProcessContext();
-    contextOriginal.put("page", page);
-    contextOriginal.put("content", page.getLastContent());
-    contextOriginal.put("fetchPageContent", false);
+		Context contextOriginal = new PageProcessContext();
+		contextOriginal.put("page", page);
+		contextOriginal.put("content", page.getLastContent());
+		contextOriginal.put("fetchPageContent", false);
 
-    Context contextCurrent = new PageProcessContext();
-    contextCurrent.put("page", page);
-    contextCurrent.put("content", page.getLastContent());
-    contextCurrent.put("fetchPageContent", true);
+		Context contextCurrent = new PageProcessContext();
+		contextCurrent.put("page", page);
+		contextCurrent.put("content", page.getLastContent());
+		contextCurrent.put("fetchPageContent", true);
 
-    pageProcessChain.execute(contextOriginal);
-    pageProcessChain.execute(contextCurrent);
+		pageProcessChain.execute(contextOriginal);
+		pageProcessChain.execute(contextCurrent);
 
-    List<String> originalTextLines = (List<String>) contextOriginal.get("lines");
-    List<String> newTextLines = (List<String>) contextCurrent.get("lines");
+		List<String> originalTextLines = (List<String>) contextOriginal.get("lines");
+		List<String> newTextLines = (List<String>) contextCurrent.get("lines");
 
-    Patch<String> patch = DiffUtils.diff(originalTextLines, newTextLines);
+		Patch<String> patch = DiffUtils.diff(originalTextLines, newTextLines);
 
-    List<String> diff =
-        UnifiedDiffUtils.generateUnifiedDiff(
-            "original-file.txt", "new-file.txt", originalTextLines, patch, 0);
+		List<String> diff = UnifiedDiffUtils.generateUnifiedDiff("original-file.txt", "new-file.txt", originalTextLines,
+				patch, 0);
 
-    List<String> diffNoFileNames = diff.size() > 2 ? diff.subList(2, diff.size()) : diff;
+		List<String> diffNoFileNames = diff.size() > 2 ? diff.subList(2, diff.size()) : diff;
 
-    DiffResultDto resultDto = new DiffResultDto();
-    resultDto.originalContent = (String) contextCurrent.get("originalContent");
-    resultDto.content = (String) contextCurrent.get("content");
-    resultDto.diff = String.join("\n", diffNoFileNames);
+		DiffResultDto resultDto = new DiffResultDto();
+		resultDto.originalContent = (String) contextCurrent.get("originalContent");
+		resultDto.content = (String) contextCurrent.get("content");
+		resultDto.diff = String.join("\n", diffNoFileNames);
 
-    return resultDto;
-  }
+		return resultDto;
+	}
+
 }

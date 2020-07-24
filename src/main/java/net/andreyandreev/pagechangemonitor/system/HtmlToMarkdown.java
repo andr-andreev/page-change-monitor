@@ -17,96 +17,101 @@ import java.util.Set;
 
 public class HtmlToMarkdown {
 
-  public static String convert(String html) {
-    MutableDataSet options =
-        new MutableDataSet()
-            .set(Parser.EXTENSIONS, Collections.singletonList(HtmlConverterTextExtension.create()));
+	public static String convert(String html) {
+		MutableDataSet options = new MutableDataSet().set(Parser.EXTENSIONS,
+				Collections.singletonList(HtmlConverterTextExtension.create()));
 
-    String markdown = FlexmarkHtmlConverter.builder(options).build().convert(html);
+		String markdown = FlexmarkHtmlConverter.builder(options).build().convert(html);
 
-    return markdown;
-  }
+		return markdown;
+	}
 
-  static class CustomLinkResolver implements HtmlLinkResolver {
+	static class CustomLinkResolver implements HtmlLinkResolver {
 
-    public CustomLinkResolver(HtmlNodeConverterContext context) {}
+		public CustomLinkResolver(HtmlNodeConverterContext context) {
+		}
 
-    @Override
-    public ResolvedLink resolveLink(
-        Node node, HtmlNodeConverterContext context, ResolvedLink link) {
-      // convert all links from http:// to https://
-      if (link.getUrl().startsWith("http:")) {
-        return link.withUrl("https:" + link.getUrl().substring("http:".length()));
-      }
-      return link;
-    }
+		@Override
+		public ResolvedLink resolveLink(Node node, HtmlNodeConverterContext context, ResolvedLink link) {
+			// convert all links from http:// to https://
+			if (link.getUrl().startsWith("http:")) {
+				return link.withUrl("https:" + link.getUrl().substring("http:".length()));
+			}
+			return link;
+		}
 
-    static class Factory implements HtmlLinkResolverFactory {
+		static class Factory implements HtmlLinkResolverFactory {
 
-      @Nullable
-      @Override
-      public Set<Class<?>> getAfterDependents() {
-        return null;
-      }
+			@Nullable
+			@Override
+			public Set<Class<?>> getAfterDependents() {
+				return null;
+			}
 
-      @Nullable
-      @Override
-      public Set<Class<?>> getBeforeDependents() {
-        return null;
-      }
+			@Nullable
+			@Override
+			public Set<Class<?>> getBeforeDependents() {
+				return null;
+			}
 
-      @Override
-      public boolean affectsGlobalScope() {
-        return false;
-      }
+			@Override
+			public boolean affectsGlobalScope() {
+				return false;
+			}
 
-      @Override
-      public HtmlLinkResolver apply(HtmlNodeConverterContext context) {
-        return new CustomLinkResolver(context);
-      }
-    }
-  }
+			@Override
+			public HtmlLinkResolver apply(HtmlNodeConverterContext context) {
+				return new CustomLinkResolver(context);
+			}
 
-  static class HtmlConverterTextExtension implements FlexmarkHtmlConverter.HtmlConverterExtension {
+		}
 
-    public static HtmlConverterTextExtension create() {
-      return new HtmlConverterTextExtension();
-    }
+	}
 
-    @Override
-    public void rendererOptions(@NotNull MutableDataHolder options) {}
+	static class HtmlConverterTextExtension implements FlexmarkHtmlConverter.HtmlConverterExtension {
 
-    @Override
-    public void extend(FlexmarkHtmlConverter.@NotNull Builder builder) {
-      builder.linkResolverFactory(new CustomLinkResolver.Factory());
-      builder.htmlNodeRendererFactory(new CustomHtmlNodeConverter.Factory());
-    }
-  }
+		public static HtmlConverterTextExtension create() {
+			return new HtmlConverterTextExtension();
+		}
 
-  static class CustomHtmlNodeConverter implements HtmlNodeRenderer {
+		@Override
+		public void rendererOptions(@NotNull MutableDataHolder options) {
+		}
 
-    public CustomHtmlNodeConverter(DataHolder options) {}
+		@Override
+		public void extend(FlexmarkHtmlConverter.@NotNull Builder builder) {
+			builder.linkResolverFactory(new CustomLinkResolver.Factory());
+			builder.htmlNodeRendererFactory(new CustomHtmlNodeConverter.Factory());
+		}
 
-    @Override
-    public Set<HtmlNodeRendererHandler<?>> getHtmlNodeRendererHandlers() {
-      return new HashSet<>(
-          Collections.singletonList(
-              new HtmlNodeRendererHandler<>("kbd", Element.class, this::processKbd)));
-    }
+	}
 
-    private void processKbd(
-        Element node, HtmlNodeConverterContext context, HtmlMarkdownWriter out) {
-      out.append("<<");
-      context.renderChildren(node, false, null);
-      out.append(">>");
-    }
+	static class CustomHtmlNodeConverter implements HtmlNodeRenderer {
 
-    static class Factory implements HtmlNodeRendererFactory {
+		public CustomHtmlNodeConverter(DataHolder options) {
+		}
 
-      @Override
-      public HtmlNodeRenderer apply(DataHolder options) {
-        return new CustomHtmlNodeConverter(options);
-      }
-    }
-  }
+		@Override
+		public Set<HtmlNodeRendererHandler<?>> getHtmlNodeRendererHandlers() {
+			return new HashSet<>(
+					Collections.singletonList(new HtmlNodeRendererHandler<>("kbd", Element.class, this::processKbd)));
+		}
+
+		private void processKbd(Element node, HtmlNodeConverterContext context, HtmlMarkdownWriter out) {
+			out.append("<<");
+			context.renderChildren(node, false, null);
+			out.append(">>");
+		}
+
+		static class Factory implements HtmlNodeRendererFactory {
+
+			@Override
+			public HtmlNodeRenderer apply(DataHolder options) {
+				return new CustomHtmlNodeConverter(options);
+			}
+
+		}
+
+	}
+
 }

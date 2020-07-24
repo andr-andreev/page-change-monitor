@@ -7,15 +7,18 @@ import org.springframework.web.servlet.View;
 
 @Controller
 class SiteController {
-  @Autowired private RssFeedView view;
 
-  @GetMapping("/")
-  public String welcome() {
-    return "redirect:/pages";
-  }
+	@Autowired
+	private RssFeedView view;
 
-  @GetMapping("/rss")
-  public View getFeed() {
-    return view;
-  }
+	@GetMapping("/")
+	public String welcome() {
+		return "redirect:/pages";
+	}
+
+	@GetMapping("/rss")
+	public View getFeed() {
+		return view;
+	}
+
 }

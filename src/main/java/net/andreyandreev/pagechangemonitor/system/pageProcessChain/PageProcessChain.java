@@ -4,11 +4,12 @@ import org.apache.commons.chain.impl.ChainBase;
 
 public class PageProcessChain extends ChainBase {
 
-  public PageProcessChain() {
-    super();
-    addCommand(new FetchPageContent());
-    addCommand(new ConvertHtmlToText());
-    addCommand(new FindSubstring());
-    addCommand(new ConvertTextToLines());
-  }
+	public PageProcessChain() {
+		super();
+		addCommand(new FetchPageContent());
+		addCommand(new ConvertHtmlToText());
+		addCommand(new FindSubstring());
+		addCommand(new ConvertTextToLines());
+	}
+
 }

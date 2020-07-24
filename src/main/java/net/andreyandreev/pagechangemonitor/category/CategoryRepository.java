@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CategoryRepository extends CrudRepository<Category, Integer> {
 
-  @Query("SELECT category FROM Category category ORDER BY category.name")
-  List<Category> findCategories();
+	@Query("SELECT category FROM Category category ORDER BY category.name")
+	List<Category> findCategories();
+
 }

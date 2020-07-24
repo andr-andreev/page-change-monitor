@@ -15,67 +15,67 @@ import java.util.Map;
 
 @Controller
 class CategoryController {
-  private final CategoryRepository categories;
 
-  public CategoryController(CategoryRepository categoryRepository) {
-    this.categories = categoryRepository;
-  }
+	private final CategoryRepository categories;
 
-  @GetMapping("/categories")
-  public String showCategoryList(Map<String, Object> model) {
-    model.put("categories", this.categories.findAll());
+	public CategoryController(CategoryRepository categoryRepository) {
+		this.categories = categoryRepository;
+	}
 
-    return "categories/index";
-  }
+	@GetMapping("/categories")
+	public String showCategoryList(Map<String, Object> model) {
+		model.put("categories", this.categories.findAll());
 
-  @GetMapping("/categories/new")
-  public String initCreationForm(Map<String, Object> model) {
-    Category category = new Category();
-    model.put("category", category);
+		return "categories/index";
+	}
 
-    return "categories/create";
-  }
+	@GetMapping("/categories/new")
+	public String initCreationForm(Map<String, Object> model) {
+		Category category = new Category();
+		model.put("category", category);
 
-  @PostMapping("/categories/new")
-  public String processCreationForm(@Valid Category category, BindingResult result) {
-    if (result.hasErrors()) {
-      return "categories/create";
-    }
+		return "categories/create";
+	}
 
-    this.categories.save(category);
+	@PostMapping("/categories/new")
+	public String processCreationForm(@Valid Category category, BindingResult result) {
+		if (result.hasErrors()) {
+			return "categories/create";
+		}
 
-    return "redirect:/categories";
-  }
+		this.categories.save(category);
 
-  @GetMapping("/categories/{categoryId}/edit")
-  public String initUpdateCategoryForm(@PathVariable("categoryId") int categoryId, Model model) {
-    Category category =
-        this.categories
-            .findById(categoryId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		return "redirect:/categories";
+	}
 
-    model.addAttribute("category", category);
+	@GetMapping("/categories/{categoryId}/edit")
+	public String initUpdateCategoryForm(@PathVariable("categoryId") int categoryId, Model model) {
+		Category category = this.categories.findById(categoryId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-    return "categories/update";
-  }
+		model.addAttribute("category", category);
 
-  @PostMapping("/categories/{categoryId}/edit")
-  public String processUpdateCategoryForm(
-      @Valid Category category, BindingResult result, @PathVariable("categoryId") int categoryId) {
-    if (result.hasErrors()) {
-      return "categories/update";
-    }
+		return "categories/update";
+	}
 
-    category.setId(categoryId);
-    this.categories.save(category);
+	@PostMapping("/categories/{categoryId}/edit")
+	public String processUpdateCategoryForm(@Valid Category category, BindingResult result,
+			@PathVariable("categoryId") int categoryId) {
+		if (result.hasErrors()) {
+			return "categories/update";
+		}
 
-    return "redirect:/categories";
-  }
+		category.setId(categoryId);
+		this.categories.save(category);
 
-  @DeleteMapping("/categories/{categoryId}")
-  public String processDeleteCategory(@PathVariable("categoryId") int categoryId) {
-    this.categories.deleteById(categoryId);
+		return "redirect:/categories";
+	}
 
-    return "redirect:/categories";
-  }
+	@DeleteMapping("/categories/{categoryId}")
+	public String processDeleteCategory(@PathVariable("categoryId") int categoryId) {
+		this.categories.deleteById(categoryId);
+
+		return "redirect:/categories";
+	}
+
 }
