@@ -9,9 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface ChangeRepository extends PagingAndSortingRepository<Change, Integer> {
 
 	@Override
-	@Query("SELECT change FROM Change change " +
-			"LEFT JOIN change.page " +
-			"WHERE change.page.isActive = true")
+	@Query("SELECT change FROM Change change LEFT JOIN change.page WHERE change.page.isActive = true")
 	@NotNull
 	Page<Change> findAll(Pageable pageable);
 
