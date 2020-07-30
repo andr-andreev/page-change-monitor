@@ -4,7 +4,7 @@
 <form method="post">
     <div class="row">
         <div class="col-md-6">
-           {{ inputField("category", "Category Name", "name", "text", category.name, _context) }}
+           {{ inputField("category", "Name", "name", "text", category.name, _context) }}
        </div>
     </div>
 
