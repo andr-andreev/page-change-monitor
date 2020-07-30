@@ -38,7 +38,7 @@
             <div class="my-2">
                 <table class="table table-striped table-bordered detail-view">
                     <tr>
-                        <th>Category Name</th>
+                        <th>Category</th>
                         <td>
                             {% if page.category != null %}
                                 {{ page.category.name }}
@@ -78,44 +78,35 @@
 
         <div class="tab-pane fade" id="page-history" role="tabpanel" aria-labelledby="page-history-tab">
             <div class="my-2">
-                <div class="grid-view">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th width="150">Updated At</th>
-                            <th>Diff</th>
-                            <th>Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for change in page.changes %}
-                        <tr>
-                            <td>{{ change.createdAt | date("MMMM d, Y, h:mm a") }}</td>
-                            <td>
+                {% for change in page.changes %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {{ change.createdAt | date("MMMM d, Y, h:mm a") }}
+                            </h6>
+                            <p class="card-text">
                                 {% if change.diff != null %}
-                                    <span class="white-space-pre">{{ change.diff }}</span>
+                                    <small class="white-space-pre text-monospace">{{ change.diff }}</small>
+                                {% elseif change.errorResponse != null %}
+                                    <small class="white-space-pre text-monospace">{{ change.errorResponse }}</small>
                                 {% else %}
                                     <span class="not-set">(not set)</span>
                                 {% endif %}
-                            </td>
-                            <td>
-                                {% if change.errorResponse != null %}
-                                    <span class="white-space-pre">{{ change.errorResponse }}</span>
-                                {% else %}
-                                    <span class="not-set">(not set)</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% else %}
-                        <tr>
-                            <td colspan="3">No changes.</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                            </p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {{ change.createdAt | date("MMMM d, Y, h:mm a") }}
+                            </h6>
+                            <p class="card-text">No changes.</p>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-        </div
+        </div>
     </div>
 </div>
 {% endblock %}
