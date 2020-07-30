@@ -16,7 +16,7 @@
 
 {% block body %}
 <div class="page-create">
-    <h1>{{ page.title }}</h1>
+    <h1>{{ title }}</h1>
 
     {% include "pages/_form" %}
 </div>
