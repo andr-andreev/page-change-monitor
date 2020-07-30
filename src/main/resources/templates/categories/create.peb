@@ -1,7 +1,7 @@
 {% extends "fragments/layout" %}
 
 {% set menu = 'categories' %}
-{% set title = "Create Category" %}
+{% set title = "Create category" %}
 
 {% block title %}{{ title }}{% endblock %}
 
