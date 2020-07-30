@@ -14,19 +14,24 @@
 {% block body %}
 <div class="page-index">
 
-    <h1 class="mb-3">
-        Pages
-        <a class="btn btn-success" href="{{ href('/pages/new') }}">Follow a new page</a></h1>
+    <div class="d-flex flex-row align-items-center">
+        <h1>
+            Pages
+        </h1>
+        <a class="btn btn-success align-items-center ml-auto" href="{{ href('/pages/new') }}">
+            Follow a new page
+        </a>
+    </div>
 
     <div class="grid-view">
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th width="40">#</th>
+                <th width="40">ID</th>
+                <th width="150">Title</th>
+                <th width="120">Category</th>
                 <th width="100">Active</th>
-                <th width="180">Category</th>
-                <th>Title</th>
-                <th width="80">Filter</th>
+                <th width="100">Filter</th>
                 <th>Updated At</th>
                 <th width="220"></th>
             </tr>
@@ -37,11 +42,7 @@
                 <tr>
                     <td>{{ page.id }}</td>
                     <td>
-                    {% if page.isActive %}
-                        <span class="badge badge-success">Yes</span>
-                    {% else %}
-                        <span class="badge badge-secondary">No</span>
-                    {% endif %}
+                        <a href="{{ page.url }}" target="_blank" rel="noreferrer">{{ page.name }}</a>
                     </td>
                     <td>
                         {% if page.category != null %}
@@ -51,7 +52,11 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ page.url }}" target="_blank">{{ page.name }}</a>
+                        {% if page.isActive %}
+                            <span class="badge badge-success">Yes</span>
+                        {% else %}
+                            <span class="badge badge-secondary">No</span>
+                        {% endif %}
                     </td>
                     <td>
                         {% if page.hasFilter() %}
